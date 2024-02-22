@@ -39,7 +39,7 @@ const MoviesDetails = () => {
   };
 
   return (
-    <div className="flex justify-center items-start md:items-center">
+    <div className="items-start md:items-center md:flex md:justify-center md:my-5">
       {movie && (
         <>
           <MovieCard movie={movie} showLink={false} />

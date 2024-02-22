@@ -45,8 +45,8 @@ const Home = () => {
   return (
     <div className="">
       <section className="first-container flex ss:justify-center">
-        <div className="flex flex-col mx-2 mt-4 ">
-          <h1 className="text-4xl text-white my-4 md:text-8xl">Bem-Vindo(a)</h1>
+        <div className="md:flex md:flex-col mx-2 mt-4 ">
+          <h1 className="text-4xl text-center text-white my-4 md:text-7xl">Bem-Vindo(a)</h1>
           <p className="text-xl my-4 text-white md:text-4xl  ">
             Milhões de Filmes, Séries para descobrir
           </p>
@@ -66,7 +66,7 @@ const Home = () => {
 
       <section className="second-container flex ">
         <div className=" flex flex-col mx-2 mt-4 ss:mx-6 sm:mx-10">
-          <h1 className="text-4xl text-center my-4 text-white md:text-8xl ">Mais populares</h1>
+          <h1 className="text-4xl text-center my-4 text-white md:text-7xl ">Mais populares</h1>
           <p className="text-xl my-4 text-white md:text-2xl">
             Explore o que está em alta e sendo mais assistido atualmente.
             Descubra os filmes, séries e pessoas que estão dominando as telas
@@ -74,7 +74,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="tendencies my-6 ">
+      <section className="Tendecies my-6 ">
         <h1 className="text-2xl text-primaryBlue flex items-center justify-center m-2 ">
           Tendencias<FaFireFlameCurved className="ml-2 text text-pRed" />
         </h1>

@@ -41,7 +41,7 @@ const PeopleDetails = () => {
     if (!people) return null;
 
     return (
-      <div className="flex justify-center items-start m-10">
+      <div className="items-start md:items-center md:flex md:justify-center md:my-5">
         <PeopleCard people={people} showLink={false} />
         <div>
           <h3 className="ml-2 text-2xl text-primaryBlue my-2 text-center">Details:</h3>
