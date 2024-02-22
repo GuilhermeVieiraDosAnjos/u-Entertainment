@@ -2,24 +2,30 @@ import { useEffect, useState } from "react"
 // import MovieCard from "../../components/movie_card/MovieCard"
 import SerieCard from "../../components/movie_card/SerieCard"
 
-const topSeriesUrl = import.meta.env.VITE_API_TV
-const apiKey = import.meta.env.VITE_API_KEY
+
 
 const Series = () => {
     const [ topSeries, setTopSeries] = useState([])
 
-    const getTopSeries = async (url) => {
-        const res = await fetch(url)
-        const data = await res.json()
+    useEffect(()=>{
+        const getTopSeries = async () => {
+            const topSeriesUrl = import.meta.env.VITE_API_TV
+            const apiKey = import.meta.env.VITE_API_KEY
+            const topRate = `${topSeriesUrl}top_rated?api_key=${apiKey}`
 
-        console.log(data)
-        setTopSeries(data.results)
-    }
+            try{
+                const res = await fetch(topRate);
+                if(!res.ok){
+                    throw new Error('Failed to Fetch top series')
+                } 
+                const data = await res.json()
+                setTopSeries(data.results)
+            }catch(e){
+                console.error('Error Fetching top series',e)
+            }
+        }
 
-    useEffect(()=> {
-        const topRate = `${topSeriesUrl}top_rated?api_key=${apiKey}`
-
-        getTopSeries(topRate)
+        getTopSeries()
     }, [])
 
   return (

@@ -20,23 +20,27 @@ const Home = () => {
     setSearch("");
   };
 
-  const getTrending = async (url) => {
+  useEffect(()=>{
+    const fetchToTrending = async () =>{
+      const trendingURL = import.meta.env.VITE_TRENDING;
+
+      const apiKey = import.meta.env.VITE_API_KEY;
+      const trendUrl = `${trendingURL}/all/day?language=en-US&api_key=${apiKey}`;
     try{
-      const res = await fetch(url);
-      const data = await res.json();
-      setTrending(data.results);
-    }catch(error){
-      console.error('Error fetching trending data:', error);
+      const res = await fetch(trendUrl);
+      if(!res.ok) {
+        throw new Error('Failed To fetch Tendencies')
+      }
+      const data = await res.json()
+      setTrending(data.results)
+    }catch(e){
+      console.error('error')
     }
-  };
+  } 
 
-  useEffect(() => {
-    const trendingURL = import.meta.env.VITE_TRENDING;
-    const apiKey = import.meta.env.VITE_API_KEY;
-    const trendUrl = `${trendingURL}/all/day?language=en-US&api_key=${apiKey}`;
+  fetchToTrending()
+  }, [])
 
-    getTrending(trendUrl);
-  }, []);
 
   return (
     <div className="">

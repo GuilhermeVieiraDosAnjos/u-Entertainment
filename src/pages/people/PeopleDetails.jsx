@@ -1,78 +1,70 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import PeopleCard from "../../components/movie_card/PeopleCard"
-// import MovieCard from '../../components/movie_card/MovieCard.jsx';
-
-const peoplesUrl = import.meta.env.VITE_PEOPLE
-const apiKey = import.meta.env.VITE_API_KEY
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import PeopleCard from "../../components/movie_card/PeopleCard";
 
 const PeopleDetails = () => {
-  const {id} = useParams()
-  const [people , setPeople ] = useState(null)
-
-  const getPeople = async (url) => {
-    const res = await fetch(url)
-    const data = await  res.json()
-
-    setPeople(data);
-    console.log(data)
-  }
-
-  const formatarData = (data) => {
-    const dataObj = new Date(data);
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return dataObj.toLocaleDateString('pt-BR', options);
-  }
-
-  const death = (date) => {
-    if(date == null) {
-      return "Person is still alive.";
-    }else{
-      return formatarData(date);
-    }
-  }
+  const { id } = useParams();
+  const [people, setPeople] = useState(null);
 
   useEffect(() => {
-    const url = `${peoplesUrl}/${id}?api_key=${apiKey}`;
+    const fetchPeopleDetails = async () => {
+      const peoplesUrl = import.meta.env.VITE_PEOPLE;
+      const apiKey = import.meta.env.VITE_API_KEY;
+      const url = `${peoplesUrl}/${id}?api_key=${apiKey}`;
 
-    getPeople(url)
-  }, [id]) 
+      try {
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error("Failed to fetch people details");
+        }
+        const data = await res.json();
+        setPeople(data);
+      } catch (error) {
+        console.error("Error fetching people details:", error);
+      }
+    };
 
-  return (
-    <div className="flex justify-center items-start  m-10">
-      {people && (<>
+    fetchPeopleDetails();
+  }, [id]);
+
+  const formatDate = (date) => {
+    if (!date) return "People still alive";
+    const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    return formattedDate;
+  };
+
+  const renderDetails = () => {
+    if (!people) return null;
+
+    return (
+      <div className="flex justify-center items-start m-10">
         <PeopleCard people={people} showLink={false} />
         <div>
           <h3 className="ml-2 text-2xl text-primaryBlue my-2 text-center">Details:</h3>
 
-          <div className="md:flex md:flex-col">
-
-            <div className="m-2">
-              <h3 className="text-center text-lg">Biography</h3>
-              <p className="text-justify">{people.biography}</p>
-            </div>
-
-            <div className="m-2">
-              <h3 className="text-center text-lg" >Birthday</h3>
-              <p>-{formatarData(people.birthday)}</p>
-            </div>
-
-            <div className="m-2">
-              <h3 className="text-center text-lg">DeathDay</h3>
-              <p>-{death(people.deathday)}</p>
-            </div>
-
-            <div className="m-2">
-              <h3 className="text-center text-lg">Place of birth</h3>
-              <p>-{people.place_of_birth}</p>
-            </div>
-
+          <div className="md:flex md:flex-col md:bg-gray-200 p-10 rounded-lg shadow-md">
+            <DetailRow label="Biography" value={people.biography} />
+            <DetailRow label="Birthday" value={formatDate(people.birthday)} />
+            <DetailRow label="Death Day" value={formatDate(people.deathday)} />
+            <DetailRow label="Place of Birth" value={people.place_of_birth} />
           </div>
-          
         </div>
-      </>)}
-    </div>
-  )
-}
+      </div>
+    );
+  };
 
-export default PeopleDetails
+  return <>{renderDetails()}</>;
+};
+
+const DetailRow = ({ label, value }) => (
+  <div className="m-2">
+    <h3 className="text-lg text-center">{label}</h3>
+    <p>{value}</p>
+  </div>
+);
+
+export default PeopleDetails;

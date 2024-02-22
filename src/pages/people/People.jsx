@@ -7,19 +7,22 @@ const apiKey = import.meta.env.VITE_API_KEY
 const People = () => {
     const [ topPeople, setTopPeople] = useState([])
 
-    const getTopPeople = async (url) => {
-        const res = await fetch(url)
-        const data = await res.json()
-
-        console.log(data)
-        setTopPeople(data.results)
-    }
-
-    useEffect(()=> {
-        const topRate = `${topPeopleUrl}popular?api_key=${apiKey}`
-
-        getTopPeople(topRate)
-    }, [])
+    useEffect(() => {
+        const fetchTopPeople = async () => {
+          try {
+            const response = await fetch(`${topPeopleUrl}/popular?api_key=${apiKey}`);
+            if (!response.ok) {
+              throw new Error("Failed to fetch top people");
+            }
+            const data = await response.json();
+            setTopPeople(data.results);
+          } catch (error) {
+            console.error("Error fetching top people:", error);
+          }
+        };
+    
+        fetchTopPeople();
+      }, []);
 
   return (
     <div>
